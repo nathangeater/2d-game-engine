@@ -24,7 +24,8 @@ public class Renderer {
 	private int[] lm;
 	private int[] lb;
 
-	private int ambientColor = 0xff0b0b0b;
+	//private int ambientColor = 0xff0b0b0b;
+	private int ambientColor = 0x00ffffff;
 	private int zDepth = 0;
 	private boolean processing = false;
 
@@ -374,5 +375,13 @@ public class Renderer {
 
 	public void setzDepth(int zDepth) {
 		this.zDepth = zDepth;
+	}
+
+	public int getAmbientColor() {
+		return ambientColor;
+	}
+
+	public void setAmbientColor(int ambientColor) {
+		this.ambientColor = ambientColor;
 	}
 }

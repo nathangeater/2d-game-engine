@@ -27,7 +27,7 @@ public class GameManager extends AbstractGame {
 //		clip = new SoundClip("/audio/monkiflip.wav");
 //		clip.setVolume(0f);
 //		light = new Light(1000, 0xff00ffff);
-		objects.add(new Map(0, 0, 1280, 720));
+		objects.add(new Map(0, 0, 1280, 1280));
 	}
 
 	@Override

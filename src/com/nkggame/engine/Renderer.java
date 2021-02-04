@@ -24,7 +24,7 @@ public class Renderer {
 	private int[] lm;
 	private int[] lb;
 
-	//private int ambientColor = 0xff0b0b0b;
+	// private int ambientColor = 0xff0b0b0b;
 	private int ambientColor = 0x00ffffff;
 	private int zDepth = 0;
 	private boolean processing = false;
@@ -69,11 +69,11 @@ public class Renderer {
 			drawImage(ir.image, ir.offX, ir.offY);
 		}
 
-		for(int i = 0; i < lightRequest.size(); i++) {
+		for (int i = 0; i < lightRequest.size(); i++) {
 			LightRequest l = lightRequest.get(i);
 			drawLightRequest(l.light, l.locX, l.locY);
 		}
-		
+
 		for (int i = 0; i < p.length; i++) {
 			float r = ((lm[i] >> 16) & 0xff) / 255f;
 			float g = ((lm[i] >> 8) & 0xff) / 255f;
@@ -130,12 +130,12 @@ public class Renderer {
 		int maxBlue = Math.max(baseColor & 0xff, value & 0xff);
 		lm[x + y * pW] = (maxRed << 16 | maxGreen << 8 | maxBlue);
 	}
-	
+
 	public void setLightBlock(int x, int y, int value) {
 		if (x < 0 || x >= pW || y < 0 || y >= pH) {
 			return;
 		}
-		
+
 		if (zb[x + y * pW] > zDepth) {
 			return;
 		}
@@ -260,7 +260,7 @@ public class Renderer {
 
 	public void drawRect(int offX, int offY, int width, int height, int color) {
 
-		for (int y = 0; y <= width; y++) {
+		for (int y = 0; y <= height; y++) {
 			setPixel(offX, y + offY, color);
 			setPixel(offX + width, y + offY, color);
 		}
@@ -314,9 +314,9 @@ public class Renderer {
 	public void drawLight(Light l, int offX, int offY) {
 		lightRequest.add(new LightRequest(l, offX, offY));
 	}
-	
+
 	private void drawLightRequest(Light l, int offX, int offY) {
-		for(int i = 0; i <= l.getDiameter(); i++) {
+		for (int i = 0; i <= l.getDiameter(); i++) {
 			drawLightLine(l, l.getRadius(), l.getRadius(), i, 0, offX, offY);
 			drawLightLine(l, l.getRadius(), l.getRadius(), i, l.getDiameter(), offX, offY);
 			drawLightLine(l, l.getRadius(), l.getRadius(), 0, i, offX, offY);
@@ -337,26 +337,26 @@ public class Renderer {
 		while (true) {
 			int screenX = x0 - l.getRadius() + offX;
 			int screenY = y0 - l.getRadius() + offY;
-			
-			if(screenX < 0 || screenX >= pW || screenY < 0 || screenY >= pH) {
+
+			if (screenX < 0 || screenX >= pW || screenY < 0 || screenY >= pH) {
 				return;
 			}
-			
+
 			int lightColor = l.getLightValue(x0, y0);
 			if (lightColor == 0) {
 				return;
 			}
-			
-			if(lb[screenX + screenY * pW] == Light.FULL) {
+
+			if (lb[screenX + screenY * pW] == Light.FULL) {
 				return;
 			}
-			
+
 			setLightMap(screenX, screenY, lightColor);
-			
+
 			if (x0 == x1 && y0 == y1) {
 				break;
 			}
-			
+
 			e2 = 2 * err;
 			if (e2 > -1 * dy) {
 				err -= dy;
@@ -384,4 +384,5 @@ public class Renderer {
 	public void setAmbientColor(int ambientColor) {
 		this.ambientColor = ambientColor;
 	}
+
 }

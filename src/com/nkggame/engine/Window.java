@@ -1,5 +1,10 @@
 package com.nkggame.engine;
 
+/**
+ * 
+ * @author Nathan Geater
+ */
+
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;

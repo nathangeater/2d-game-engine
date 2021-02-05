@@ -7,6 +7,11 @@ import com.nkggame.engine.GameContainer;
 import com.nkggame.engine.Renderer;
 import com.nkggame.engine.gfx.ImageTile;
 
+/**
+ * 
+ * @author Nathan Geater
+ */
+
 public class Map extends GameObject {
 
 	private ArrayList<StarSystem> starSystems;
@@ -75,6 +80,14 @@ public class Map extends GameObject {
 		if (gc.getInput().isKey(KeyEvent.VK_D)) {
 			posX += 5 / scale + 1;
 			cursorX += 5 / scale + 1;
+			isChanged = true;
+		}
+		
+		if (gc.getInput().isButtonDown(1)) {
+			posX += (gc.getInput().getMouseX() / scale) - gc.getWidth() / scale / 2;
+			posY += (gc.getInput().getMouseY() / scale) - gc.getHeight() / scale / 2;
+			cursorX += (gc.getInput().getMouseX() / scale) - gc.getWidth() / scale / 2;
+			cursorY += (gc.getInput().getMouseY() / scale) - gc.getHeight() / scale / 2;
 			isChanged = true;
 		}
 

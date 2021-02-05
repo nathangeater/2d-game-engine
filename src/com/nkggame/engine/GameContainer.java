@@ -1,5 +1,10 @@
 package com.nkggame.engine;
 
+/**
+ * 
+ * @author Nathan Geater
+ */
+
 public class GameContainer implements Runnable {
 
 	private Thread thread;

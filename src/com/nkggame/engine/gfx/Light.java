@@ -1,5 +1,10 @@
 package com.nkggame.engine.gfx;
 
+/**
+ * 
+ * @author Nathan Geater
+ */
+
 public class Light {
 	public static final int NONE = 0;
 	public static final int FULL = 1;

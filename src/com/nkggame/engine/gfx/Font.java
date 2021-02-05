@@ -1,5 +1,10 @@
 package com.nkggame.engine.gfx;
 
+/**
+ * 
+ * @author Nathan Geater
+ */
+
 public class Font {
 	
 	public static final Font STANDARD = new Font("/fonts/comic.png");

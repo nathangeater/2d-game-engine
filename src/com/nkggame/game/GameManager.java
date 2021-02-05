@@ -6,6 +6,11 @@ import com.nkggame.engine.AbstractGame;
 import com.nkggame.engine.GameContainer;
 import com.nkggame.engine.Renderer;
 
+/**
+ * 
+ * @author Nathan Geater
+ */
+
 public class GameManager extends AbstractGame {
 
 	private ArrayList<GameObject> objects = new ArrayList<GameObject>();

@@ -1,3 +1,4 @@
+
 package com.nkggame.engine.audio;
 
 import java.io.BufferedInputStream;
@@ -11,6 +12,11 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+
+/**
+ * 
+ * @author Nathan Geater
+ */
 
 public class SoundClip {
 

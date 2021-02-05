@@ -5,6 +5,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * 
+ * @author Nathan Geater
+ */
+
 public class Image {
 
 	private int w, h;

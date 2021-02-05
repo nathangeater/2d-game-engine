@@ -3,6 +3,11 @@ package com.nkggame.game;
 import com.nkggame.engine.GameContainer;
 import com.nkggame.engine.Renderer;
 
+/**
+ * 
+ * @author Nathan Geater
+ */
+
 public class StarSystem extends GameObject {
 
 	public StarSystem(int posX, int posY) {

@@ -3,6 +3,11 @@ package com.nkggame.game;
 import com.nkggame.engine.GameContainer;
 import com.nkggame.engine.Renderer;
 
+/**
+ * 
+ * @author Nathan Geater
+ */
+
 public abstract class GameObject {
 	protected String tag;
 	protected float posX, posY;

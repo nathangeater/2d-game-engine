@@ -1,5 +1,10 @@
 package com.nkggame.engine.gfx;
 
+/**
+ * 
+ * @author Nathan Geater
+ */
+
 public class ImageRequest {
 
 	public Image image;

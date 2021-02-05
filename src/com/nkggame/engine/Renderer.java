@@ -12,6 +12,11 @@ import com.nkggame.engine.gfx.ImageTile;
 import com.nkggame.engine.gfx.Light;
 import com.nkggame.engine.gfx.LightRequest;
 
+/**
+ * 
+ * @author Nathan Geater
+ */
+
 public class Renderer {
 
 	private Font font = Font.STANDARD;

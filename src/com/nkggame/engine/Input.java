@@ -8,6 +8,11 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+/**
+ * 
+ * @author Nathan Geater
+ */
+
 public class Input implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
 	private GameContainer gc;

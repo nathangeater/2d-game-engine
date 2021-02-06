@@ -28,11 +28,21 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 	private int mouseX, mouseY;
 	private int scroll;
 
+	private boolean isTyping;
+	private boolean isTypingNumpad;
+	private String query;
+	private String queryNumpad;
+
 	public Input(GameContainer gc) {
 		this.gc = gc;
 		mouseX = 0;
 		mouseY = 0;
 		scroll = 0;
+
+		isTyping = false;
+		isTypingNumpad = false;
+		query = "";
+		queryNumpad = "";
 
 		gc.getWindow().getCanvas().addKeyListener(this);
 		gc.getWindow().getCanvas().addMouseMotionListener(this);
@@ -42,6 +52,14 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 
 	public void update() {
 		scroll = 0;
+
+		for (int i = 0; i < NUM_KEYS; i++) {
+			keysLast[i] = keys[i];
+		}
+
+		for (int i = 0; i < NUM_BUTTONS; i++) {
+			buttonsLast[i] = buttons[i];
+		}
 
 		for (int i = 0; i < NUM_KEYS; i++) {
 			keysLast[i] = keys[i];
@@ -125,20 +143,33 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void keyPressed(KeyEvent e) {
 		keys[e.getKeyCode()] = true;
+		if (isTyping) {
+
+			if (isKeyDown(e.getKeyCode())) {
+				query = query + (e.getKeyChar());
+			}
+
+		}
+
+		if (isTypingNumpad) {
+			if (e.getKeyCode() != KeyEvent.VK_NUM_LOCK && isKeyDown(e.getKeyCode())
+					&& (e.getKeyLocation() == KeyEvent.KEY_LOCATION_NUMPAD) || e.getKeyCode() == KeyEvent.VK_SPACE) {
+				queryNumpad = queryNumpad + (e.getKeyChar());
+			}
+		}
 
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		keys[e.getKeyCode()] = false;
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
 
 	}
 
@@ -152,6 +183,38 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 
 	public int getScroll() {
 		return scroll;
+	}
+
+	public boolean isTyping() {
+		return isTyping;
+	}
+
+	public void setTyping(boolean isTyping) {
+		this.isTyping = isTyping;
+	}
+
+	public String getQuery() {
+		return query;
+	}
+
+	public void setQuery(String query) {
+		this.query = query;
+	}
+
+	public boolean isTypingNumpad() {
+		return isTypingNumpad;
+	}
+
+	public void setTypingNumpad(boolean isTypingNumpad) {
+		this.isTypingNumpad = isTypingNumpad;
+	}
+
+	public String getQueryNumpad() {
+		return queryNumpad;
+	}
+
+	public void setQueryNumpad(String queryNumpad) {
+		this.queryNumpad = queryNumpad;
 	}
 
 }

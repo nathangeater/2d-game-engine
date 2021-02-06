@@ -275,6 +275,75 @@ public class Renderer {
 		}
 	}
 
+	public void drawOval(int offX, int offY, int width, int height, int color) {
+		double a = width / 2;
+		double b = height / 2;
+		offX += width / 2;
+		offY += height / 2;
+		for (int x = -width / 2; x <= width / 2; x++) {
+			setPixel(x + offX, (int) Math.sqrt(b * b - (b * b) / (a * a) * x * x) + offY, color);
+			setPixel(x + offX, -(int) Math.sqrt(b * b - (b * b) / (a * a) * x * x) + offY, color);
+		}
+		for (int y = -height / 2; y <= height / 2; y++) {
+			setPixel((int) Math.sqrt(a * a - (a * a) / (b * b) * y * y) + offX, y + offY, color);
+			setPixel(-(int) Math.sqrt(a * a - (a * a) / (b * b) * y * y) + offX, y + offY, color);
+		}
+//		for (int y = -height / 2; y <= height / 2; y++) {
+//			for (int x = -width / 2; x <= width / 2; x++) {
+//				if (((x) * (x) / (a * a) + ((y) * (y) / (b * b))) <= 1) {
+//					setPixel(x + offX, y + offY, color);
+//				}
+//			}
+//		}
+	}
+	
+	public void drawFillOval(int offX, int offY, int width, int height, int color) {
+		// Don't render
+		if (offX < -width) {
+			return;
+		}
+		if (offY < -height) {
+			return;
+		}
+		if (offX >= pW) {
+			return;
+		}
+		if (offY >= pH) {
+			return;
+		}
+
+		int newWidth = width;
+		int newHeight = height;
+
+		// Clip image
+
+		if (newWidth + offX > pW) {
+			newWidth -= newWidth + offX - pW;
+		}
+		if (newHeight + offY > pH) {
+			newHeight -= newHeight + offY - pH;
+		}
+
+		double a = width / 2;
+		double b = height / 2;
+		offX += width / 2;
+		offY += height / 2;
+//		for (int y = newY; y < newHeight; y++) {
+//			for (int x = newX; x < newWidth; x++) {
+//				if (((x - offX) * (x - offX) / (a * a) + ((y - offY) * (y - offY) / (b * b))) <= 1) {
+//					setPixel(x + offX, y + offY, color);
+//				}
+//			}
+//		}
+		for (int y = -newHeight / 2; y <= newHeight / 2; y++) {
+			for (int x = -newWidth / 2; x <= newWidth / 2; x++) {
+				if (((x) * (x) / (a * a) + ((y) * (y) / (b * b))) <= 1) {
+					setPixel(x + offX, y + offY, color);
+				}
+			}
+		}
+	}
+
 	public void drawFillRect(int offX, int offY, int width, int height, int color) {
 		// Don't render
 		if (offX < -width) {

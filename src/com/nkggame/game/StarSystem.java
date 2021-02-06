@@ -9,17 +9,21 @@ import com.nkggame.engine.Renderer;
  */
 
 public class StarSystem extends GameObject {
-
+	
+	private Star mainStar;
+	
 	public StarSystem(int posX, int posY) {
 		this.posX = posX;
 		this.posY = posY;
-		boolean isStar = Math.abs(rng((posX & 0xffff) << 16 | (posY & 0xffff))) % 101 < ((10) * Math.pow(Math.E,
-				-((posX - width / 2) * (posX - width / 2) + (posY - height / 2) * (posY - height / 2)) / (100000)))
-				- 0.00000000000000000000001;
+		int random = Math.abs(rng((posX & 0xffff) << 16 | (posY & 0xffff)));
+		boolean isStar = random % 101 < ((10) * Math.pow(Math.E,
+				-((posX - width / 2) * (posX - width / 2) + (posY - height / 2) * (posY - height / 2)) / (10000000)))
+				- 0.0000000000000000000000001;
 		if (!isStar) {
 			setDead(true);
 			return;
 		}
+		mainStar = new Star(random);
 	}
 
 	@Override
@@ -39,6 +43,10 @@ public class StarSystem extends GameObject {
 		temp = (long) m1 * 0x12fad5c9;
 		int m2 = (int) ((temp >> 32) ^ temp);
 		return m2;
+	}
+
+	public Star getMainStar() {
+		return mainStar;
 	}
 
 }

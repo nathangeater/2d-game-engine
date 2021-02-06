@@ -16,7 +16,9 @@ public class GameManager extends AbstractGame {
 	private ArrayList<GameObject> objects = new ArrayList<GameObject>();
 
 	public GameManager() {
-		objects.add(new Map(0, 0, 5000, 5000));
+		objects.add(new Map(3054, 2979, 5000, 5000));
+		//System.out.println(new Map(0, 0, 50000, 50000).countEveryStarSystem());
+		//current simulation has a total of 21,467,207 stars
 	}
 
 	@Override
@@ -40,6 +42,8 @@ public class GameManager extends AbstractGame {
 		for(GameObject obj : objects) {
 			obj.render(gc, r);
 		}
+//		r.drawOval(200, 0, 200, 250, -1);
+//		r.drawFillOval(200, 0, 200, 250, -1);
 	}
 
 	public static void main(String args[]) {

@@ -15,6 +15,7 @@ import com.nkggame.engine.gfx.ImageTile;
 public class Map extends GameObject {
 
 	private ArrayList<StarSystem> starSystems;
+	private StarSystem selectedStarSystem;
 	private int starCount;
 	private boolean isChanged;
 	private int scale;
@@ -37,6 +38,7 @@ public class Map extends GameObject {
 		isChanged = true;
 		cursorX = 0;
 		cursorY = 0;
+		selectedStarSystem = null;
 		isCursorSet = false;
 		stars = new ImageTile("/stars.png", 32, 32);
 		useStarSprites = true;
@@ -57,24 +59,8 @@ public class Map extends GameObject {
 				posX -= (gc.getWidth() / 2) / scale;
 				posY -= (gc.getHeight() / 2) / scale;
 			}
+			selectedStarSystem = new StarSystem((int) cursorX, (int) cursorY);
 			isCursorSet = true;
-		}
-
-		if (isChanged) {
-			starSystems.clear();
-			starCount = 0;
-			int sectorX = gc.getWidth() / scale;
-			int sectorY = gc.getHeight() / scale;
-			for (int y = 0; y < sectorY; y++) {
-				for (int x = 0; x < sectorX; x++) {
-					StarSystem starS = new StarSystem(x + (int) posX, y + (int) posY);
-					if (!starS.isDead()) {
-						starSystems.add(starS);
-						starCount++;
-					}
-				}
-			}
-			isChanged = false;
 		}
 
 		if (gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
@@ -99,7 +85,6 @@ public class Map extends GameObject {
 					if (numSpaces == 1) {
 						int coordX = Integer.parseInt(fullQ.substring(0, fullQ.indexOf(' ')));
 						int coordY = Integer.parseInt(fullQ.substring(fullQ.indexOf(' ') + 1));
-						System.out.println(coordX + " " + coordY);
 						posY += coordY - cursorY;
 						cursorY = coordY;
 						posX += coordX - cursorX;
@@ -159,6 +144,34 @@ public class Map extends GameObject {
 			}
 			isChanged = true;
 		}
+
+		if (gc.getInput().isKeyDown(KeyEvent.VK_SPACE) && !gc.getInput().isTypingNumpad()) {
+			if (selectedStarSystem.isStar()) {
+				if (!selectedStarSystem.isViewing()) {
+					selectedStarSystem.setViewing(true);
+				} else {
+					selectedStarSystem.setViewing(false);
+				}
+			}
+		}
+
+		if (isChanged) {
+			starSystems.clear();
+			starCount = 0;
+			int sectorX = gc.getWidth() / scale;
+			int sectorY = gc.getHeight() / scale;
+			for (int y = 0; y < sectorY; y++) {
+				for (int x = 0; x < sectorX; x++) {
+					StarSystem starS = new StarSystem(x + (int) posX, y + (int) posY);
+					if (starS.isStar()) {
+						starSystems.add(starS);
+						starCount++;
+					}
+				}
+			}
+			selectedStarSystem = new StarSystem((int) cursorX, (int) cursorY);
+			isChanged = false;
+		}
 	}
 
 	public int countEveryStarSystem() {
@@ -166,7 +179,7 @@ public class Map extends GameObject {
 		for (int y = -height / 2; y < height / 2; y++) {
 			for (int x = -width / 2; x < width / 2; x++) {
 				StarSystem starS = new StarSystem(x, y);
-				if (!starS.isDead()) {
+				if (starS.isStar()) {
 					countOfAll++;
 				}
 			}
@@ -199,9 +212,12 @@ public class Map extends GameObject {
 			r.drawRect((int) gc.getWidth() / 2, gc.getHeight() / 2, scale, scale, 0xff00ff00);
 		}
 
-		StarSystem starOnCursor = new StarSystem((int) cursorX, (int) cursorY);
-		if (!starOnCursor.isDead()) {
-			r.drawText(starOnCursor.getMainStar().getTypeString() + "-Type Star", 0, 55, 0xffffff00);
+		if (selectedStarSystem.isStar()) {
+			if (selectedStarSystem.isViewing()) {
+				selectedStarSystem.generate();
+				viewStar(gc, r);
+			}
+			r.drawText(selectedStarSystem.getMainStar().getTypeString() + "-Type Star", 0, 55, 0xffffff00);
 		}
 
 		r.drawText("Starcount: " + starCount, 0, 11, 0xffff00ff);
@@ -213,6 +229,36 @@ public class Map extends GameObject {
 			r.drawText("Go to: " + gc.getInput().getQueryNumpad(), 0, 66, 0xff00ff00);
 		}
 
+	}
+
+	private void viewStar(GameContainer gc, Renderer r) {
+		r.drawFillRect(0, gc.getHeight() / 4, gc.getWidth(), gc.getHeight() / 2, 0xff000022);
+		int starSize = (int) (selectedStarSystem.getMainStar().getSize() * 750);
+		r.drawFillOval(Math.min(-starSize / 2, -starSize + 200), gc.getHeight() / 2 - starSize / 2, starSize, starSize,
+				selectedStarSystem.getMainStar().getColor());
+		int distance = 240;
+		for (int i = 0; i < selectedStarSystem.getMainStar().getSatellites().length; i++) {
+			int planetSize = (int) selectedStarSystem.getMainStar().getSatellites()[i].getSize();
+			if (selectedStarSystem.getMainStar().getSatellites()[i].isRinged()) {
+				int ringSize = selectedStarSystem.getMainStar().getSatellites()[i].getRingSize();
+				distance += ringSize / 2 - planetSize / 2;
+			}
+			r.drawFillOval(distance, gc.getHeight() / 2 - planetSize / 2, planetSize, planetSize,
+					selectedStarSystem.getMainStar().getSatellites()[i].getColor());
+			int moonDistance = planetSize / 2 + 5;
+			for (int j = 0; j < selectedStarSystem.getMainStar().getSatellites()[i].getSatellites().length; j++) {
+				int moonSize = (int) selectedStarSystem.getMainStar().getSatellites()[i].getSatellites()[j].getSize();
+				r.drawFillOval(distance - moonSize / 2 + planetSize / 2, gc.getHeight() / 2 + moonDistance, moonSize, moonSize,
+						selectedStarSystem.getMainStar().getSatellites()[i].getSatellites()[j].getColor());
+				moonDistance += moonSize + 5;
+			}
+			if (selectedStarSystem.getMainStar().getSatellites()[i].isRinged()) {
+				int ringSize = selectedStarSystem.getMainStar().getSatellites()[i].getRingSize();
+				r.drawFillOval(distance - ringSize / 2 + planetSize / 2, gc.getHeight() / 2 - planetSize / 10, ringSize, planetSize / 5, -1);
+				distance += ringSize / 2 - planetSize / 2;
+			}
+			distance += planetSize + 40;
+		}
 	}
 
 }

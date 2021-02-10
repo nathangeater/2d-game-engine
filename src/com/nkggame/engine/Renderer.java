@@ -288,16 +288,17 @@ public class Renderer {
 			setPixel((int) Math.sqrt(a * a - (a * a) / (b * b) * y * y) + offX, y + offY, color);
 			setPixel(-(int) Math.sqrt(a * a - (a * a) / (b * b) * y * y) + offX, y + offY, color);
 		}
-//		for (int y = -height / 2; y <= height / 2; y++) {
-//			for (int x = -width / 2; x <= width / 2; x++) {
-//				if (((x) * (x) / (a * a) + ((y) * (y) / (b * b))) <= 1) {
-//					setPixel(x + offX, y + offY, color);
-//				}
-//			}
-//		}
+
 	}
 	
 	public void drawFillOval(int offX, int offY, int width, int height, int color) {
+		
+		double a = width / 2;
+		double b = height / 2;
+		int ogX = offX;
+		int ogY = offY;
+		offX += a;
+		offY += b;
 		// Don't render
 		if (offX < -width) {
 			return;
@@ -312,11 +313,18 @@ public class Renderer {
 			return;
 		}
 
+		int newX = 0;
+		int newY = 0;
 		int newWidth = width;
 		int newHeight = height;
 
 		// Clip image
-
+		if (offX < 0) {
+			newX -= offX;
+		}
+		if (offY < 0) {
+			newY -= offY;
+		}
 		if (newWidth + offX > pW) {
 			newWidth -= newWidth + offX - pW;
 		}
@@ -324,21 +332,59 @@ public class Renderer {
 			newHeight -= newHeight + offY - pH;
 		}
 
-		double a = width / 2;
-		double b = height / 2;
-		offX += width / 2;
-		offY += height / 2;
-//		for (int y = newY; y < newHeight; y++) {
-//			for (int x = newX; x < newWidth; x++) {
-//				if (((x - offX) * (x - offX) / (a * a) + ((y - offY) * (y - offY) / (b * b))) <= 1) {
-//					setPixel(x + offX, y + offY, color);
-//				}
-//			}
-//		}
-		for (int y = -newHeight / 2; y <= newHeight / 2; y++) {
-			for (int x = -newWidth / 2; x <= newWidth / 2; x++) {
+		for (int y = newY; y < newHeight; y++) {
+			for (int x = newX; x < newWidth; x++) {
 				if (((x) * (x) / (a * a) + ((y) * (y) / (b * b))) <= 1) {
 					setPixel(x + offX, y + offY, color);
+					//setPixel(-x + offX, y + offY, color);
+					setPixel(x + offX, -y + offY, color);
+					//setPixel(-x + offX, -y + offY, color);
+				}
+			}
+		}
+		//623 1971
+
+		// Don't render
+		if (ogX < -width) {
+			return;
+		}
+		if (ogY < -height) {
+			return;
+		}
+		if (ogX >= pW) {
+			return;
+		}
+		if (ogY >= pH) {
+			return;
+		}
+
+		newX = 0;
+		newY = 0;
+		newWidth = width;
+		newHeight = height;
+
+		// Clip image
+		if (ogX < 0) {
+			newX -= ogX;
+		}
+		if (ogY < 0) {
+			newY -= ogY;
+		}
+		if (newWidth + ogX > pW) {
+			newWidth -= newWidth + ogX - pW;
+		}
+		if (newHeight + ogY > pH) {
+			newHeight -= newHeight + ogY - pH;
+		}
+		ogX += a;
+		ogY += b;
+		for (int y = newY; y < newHeight; y++) {
+			for (int x = newX; x < newWidth; x++) {
+				if (((x) * (x) / (a * a) + ((y) * (y) / (b * b))) <= 1) {
+					//setPixel(x + offX, y + offY, color);
+					setPixel(-x + ogX, y + ogY, color);
+					//setPixel(x + offX, -y + offY, color);
+					setPixel(-x + ogX, -y + ogY, color);
 				}
 			}
 		}

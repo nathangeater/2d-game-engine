@@ -1,41 +1,36 @@
 package com.nkggame.game;
 
-import com.nkggame.engine.GameContainer;
-import com.nkggame.engine.Renderer;
-
 /**
  * 
  * @author Nathan Geater
  */
 
-public class StarSystem extends GameObject {
-	
+public class StarSystem {
+
 	private Star mainStar;
-	
+	private boolean isViewing;
+	private int random;
+	private int posX;
+	private int posY;
+	private boolean isStar;
+
 	public StarSystem(int posX, int posY) {
 		this.posX = posX;
 		this.posY = posY;
-		int random = Math.abs(rng((posX & 0xffff) << 16 | (posY & 0xffff)));
-		boolean isStar = random % 101 < ((10) * Math.pow(Math.E,
-				-((posX - width / 2) * (posX - width / 2) + (posY - height / 2) * (posY - height / 2)) / (10000000)))
+		random = Math.abs(rng((posX & 0xffff) << 16 | (posY & 0xffff)));
+		isStar = Math.abs(random % 101) < ((10) * Math.pow(Math.E, -((posX) * (posX) + (posY) * (posY)) / (10000000)))
 				- 0.0000000000000000000000001;
 		if (!isStar) {
-			setDead(true);
 			return;
 		}
 		mainStar = new Star(random);
+		isViewing = false;
 	}
 
-	@Override
-	public void update(GameContainer gc, float dt) {
-
+	public void generate() {
+		mainStar.generate(random);
 	}
-
-	@Override
-	public void render(GameContainer gc, Renderer r) {
-
-	}
-
+	
 	private int rng(int seed) {
 		seed += 0xe120fc15;
 		Long temp = (long) seed * 0x4a39b70d;
@@ -47,6 +42,34 @@ public class StarSystem extends GameObject {
 
 	public Star getMainStar() {
 		return mainStar;
+	}
+
+	public boolean isViewing() {
+		return isViewing;
+	}
+
+	public void setViewing(boolean isViewing) {
+		this.isViewing = isViewing;
+	}
+
+	public boolean isStar() {
+		return isStar;
+	}
+
+	public int getPosX() {
+		return posX;
+	}
+
+	public void setPosX(int posX) {
+		this.posX = posX;
+	}
+
+	public int getPosY() {
+		return posY;
+	}
+
+	public void setPosY(int posY) {
+		this.posY = posY;
 	}
 
 }
